@@ -1,49 +1,33 @@
 /******************************************************************
- * Title: Tic Tac Toe
+ * Title: Coin Flip
  *
- * Purpose: Write a two-player tic-tac-toe game, allowing two humans
- * to play against each other
+ * Purpose: Simulate a coin flip
  *
  ******************************************************************/
 
 #include <iostream>
+#include <ctime>
+#include <cstdlib>
 
 using namespace std;
 
-void print_board(char spot[]){
-    cout << " " << spot[0] << " | " << spot[1] << " | " << spot[2] << " \n";
-    cout << "-----------\n";
-    cout << " " << spot[3] << " | " << spot[4] << " | " << spot[5] << " \n";
-    cout << "-----------\n";
-    cout << " " << spot[6] << " | " << spot[7] << " | " << spot[8] << " \n";
+int randRange(int low, int high){
+    return rand() % ((high - low + 1) + low);
 }
 
 int main(){
-    char board_position;
-    char board[9] = { '1', '2', '3', '4', '5', '6', '7', '8', '9' };
-    bool turn = 0;
+    bool coin_state = 0;
+    int i = 0;
     
-    print_board(board);
+    srand((int)time(NULL));
     
-    while(board_position != 'q'){
-        turn = !turn;
+    for(i = 0; i < 10; i++){
+        coin_state = randRange(0, 1);
         
-        if(turn){
-            cout << "Player X turn: ";
-            cin >> board_position;
-            if(board_position == 'q'){
-                break;
-            }
-            board[board_position - 49] = 'X';
+        if(coin_state == 0){
+            cout << "Heads\n";
         } else{
-            cout << "Player O turn: ";
-            cin >> board_position;
-            if(board_position == 'q'){
-                break;
-            }
-            board[board_position - 49] = 'O';
+            cout << "Tails\n";
         }
-        print_board(board);
     }
-    
 }
