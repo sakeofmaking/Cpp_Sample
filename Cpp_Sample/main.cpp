@@ -1,7 +1,11 @@
 /******************************************************************
- * Title: Coin Flip
+ * Title: Pick a Number
  *
- * Purpose: Simulate a coin flip
+ * Purpose: Write a program that picks a number between 1 and 100, 
+ * and then lets the user guess what the number is. The program should 
+ * tell the user if their guess is too high, too low, or just right.
+ *
+ * Source: Allain, Alex (2013-09-16). Jumping into C++ (p. 120). Cprogramming.com. Kindle Edition.
  *
  ******************************************************************/
 
@@ -16,18 +20,23 @@ int randRange(int low, int high){
 }
 
 int main(){
-    bool coin_state = 0;
-    int i = 0;
+    int chosen_num = 0;
+    int guess = 0;
     
     srand((int)time(NULL));
     
-    for(i = 0; i < 10; i++){
-        coin_state = randRange(0, 1);
+    chosen_num = randRange(1, 100);
+    
+    while(guess != chosen_num){
+        cout << "Enter guess: ";
+        cin >> guess;
         
-        if(coin_state == 0){
-            cout << "Heads\n";
-        } else{
-            cout << "Tails\n";
+        if(guess > chosen_num){
+            cout << guess << " is too high.\n";
+        } else if(guess < chosen_num){
+            cout << guess << " is too low.\n";
         }
     }
+    
+    cout << chosen_num << " is correct!";
 }
