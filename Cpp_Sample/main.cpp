@@ -1,11 +1,13 @@
 /******************************************************************
- * Title: Pick a Number Solution
+ * Title: Slot Machine
  *
- * Purpose: Write a program that picks a number between 1 and 100, 
- * and then lets the user guess what the number is. The program should 
- * tell the user if their guess is too high, too low, or just right.
- * 
- * Write a program that solves the guessing game from problem 2. How many guesses does your program need?
+ * Purpose: Make a “slot machine” game that randomly displays the results 
+ * of a slot machine to a player—have three (or more) possible values for 
+ * each wheel of the slot machine. Don’t worry about displaying the text 
+ * “spinning” by. Just choose the results and display them and print out 
+ * the winnings (choose your own winning combination).
+ *
+ * Warning: Theoretically, the loop can continue forever.
  *
  * Source: Allain, Alex (2013-09-16). Jumping into C++ (p. 120). Cprogramming.com. Kindle Edition.
  *
@@ -17,37 +19,53 @@
 
 using namespace std;
 
+enum SlotChar{
+    CHERRY,
+    LEMON,
+    BAR
+};
+
 int randRange(int low, int high){
-    return rand() % ((high - low + 1) + low);
+    return rand() % (high - low + 1) + low;
 }
 
-int middle(int low, int high){
-    return (((high - low) / 2) + low);
-}
 
 int main(){
-    int chosen_num = 0;
-    int guess = 0;
-    int low = 1;
-    int high = 100;
-    int count = 0;
+    int chosen_char;
+    int count;
     
     srand((int)time(NULL));
     
-    chosen_num = randRange(1, 100);
-    
-    while(guess != chosen_num){
-        guess = middle(low, high);
-        count++;
+    // Display the results
+    do{
+        count = 0;
         
-        if(guess > chosen_num){
-            high = guess - 1;
-        } else if(guess < chosen_num){
-            low = guess + 1;
+        for(int i = 0; i < 3; i++){
+            chosen_char = randRange(CHERRY, BAR);
+
+            switch(chosen_char){
+                case CHERRY:
+                    cout << "[CHERRY]";
+                    count++;
+                    break;
+                case LEMON:
+                    cout << "[LEMON]";
+                    break;
+                case BAR:
+                    cout << "[BAR]";
+                    break;
+                default:;
+                    // Should never happen
+            }
         }
-    }
-    cout << chosen_num << " is correct!\n";
-    cout << "Program guessed " << count << " times.\n";
+        cout << "\n";
+    
+        // Check for winning combination
+        if(count == 3){
+            cout << "Winner!";
+        }
+    } while(count != 3);
+    
 }
 
 
