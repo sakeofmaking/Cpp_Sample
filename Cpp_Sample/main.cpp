@@ -1,75 +1,75 @@
 /******************************************************************
- * Title: Poker
+ * Title: English Text For Numbers
  *
- * Purpose: Write a program to play poker! You can provide 5 cards to 
- * the player, let that player choose new cards, and then determine how 
- * good the hand is. Think about whether this is easy to do. What problems 
- * might you have in terms of keeping track of cards that have been drawn 
- * already? Was this easier or harder than the slot machine?
+ * Purpose: Implement the source code that turns numbers into English 
+ * text for numbers between -999,999 and 999,999. (Hint: You might also 
+ * be able to take advantage of the fact that the integer data type will 
+ * truncate decimal points. Also, remember that your algorithm doesn’t 
+ * have to work for all numbers—only numbers with six digits or less. )
  *
  * Source: Allain, Alex (2013-09-16). Jumping into C++ (p. 120). Cprogramming.com. Kindle Edition.
  *
  ******************************************************************/
 
 #include <iostream>
-#include <ctime> // For random number seed
-#include <cstdlib> // For random number generation
 
 using namespace std;
 
-enum Suit{ CLUBS, SPADES, DIMONDS, HEARTS };
-char card_num[13] = {'A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K'} ;
-
-// Generate a random number within a given range
-int randRange(int low, int high){
-    return rand() % (high - low + 1) + low;
-}
-
 int main(){
-    int chosen_suit = 0;
-    int chosen_num = 0;
-    int i, j, k;
+    int number = 0;
+    int thousands_chunk = 0;
+    int hundreds_chunk = 0;
+    string under_twenty[19] = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven",
+                        "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"};
+    string twenty_above[] = {"twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"};
     
-    // Store the cards in an array
-    string deck_of_card[4][13];
-    for(i = 0; i < 4; i++){
-        for(j = 0; j < 13; j++){
-            deck_of_card[i][j] = card_num[j];
-            switch(i){
-                case CLUBS:
-                    deck_of_card[i][j] += " of clubs";
-                    break;
-                case SPADES:
-                    deck_of_card[i][j] += " of spades";
-                    break;
-                case DIMONDS:
-                    deck_of_card[i][j] += " of dimonds";
-                    break;
-                case HEARTS:
-                    deck_of_card[i][j] += " of hearts";
-                    break;
-                default:;
-                    // Should never happen
+    // Store input as number
+    cout << "Enter number from -999999 to 999999: ";
+    cin >> number;
+    
+    // If negative, display "negative" and convert to positive
+    if(number < 0){
+        cout << "negative ";
+        number = -number;
+    }
+    
+    // Break number into chunks of three digits
+    thousands_chunk = number / 1000;
+    hundreds_chunk = number - (thousands_chunk * 1000);
+
+    // Compute text of thousands chunk
+    if(thousands_chunk != 0){
+        if((thousands_chunk / 100) != 0){
+            cout << under_twenty[(thousands_chunk / 100) - 1] << " hundred ";
+        }
+        if((thousands_chunk - (thousands_chunk / 100 * 100) < 20) && (thousands_chunk - (thousands_chunk / 100 * 100) > 0)){
+            cout << under_twenty[thousands_chunk - (thousands_chunk / 100 * 100) - 1];
+        } else{
+            cout << twenty_above[((thousands_chunk - (thousands_chunk / 100 * 100)) / 10) - 2];
+            if(thousands_chunk - (thousands_chunk / 10 * 10) != 0){
+                cout << ' ' << under_twenty[thousands_chunk - (thousands_chunk / 10 * 10) - 1];
+            }
+        }
+        if(thousands_chunk != 0){
+            cout << " thousand ";
+        }
+    }
+    
+    // Compute text of hundreds chunk
+    if(hundreds_chunk != 0){
+        if((hundreds_chunk / 100) != 0){
+            cout << under_twenty[(hundreds_chunk / 100) - 1] << " hundred ";
+        }
+        if((hundreds_chunk - (hundreds_chunk / 100 * 100) < 20) && (hundreds_chunk - (hundreds_chunk / 100 * 100) > 0)){
+            cout << under_twenty[hundreds_chunk - (hundreds_chunk / 100 * 100) - 1];
+        } else{
+            cout << twenty_above[((hundreds_chunk - (hundreds_chunk / 100 * 100)) / 10) - 2];
+            if(hundreds_chunk - (hundreds_chunk / 10 * 10) != 0){
+                cout << ' ' << under_twenty[hundreds_chunk - (hundreds_chunk / 10 * 10) - 1];
             }
         }
     }
-    
-    srand((int)time(NULL));
-    
-    // Display hand
-    for(k = 0; k < 5; k++){
-        chosen_suit = randRange(0, 3);
-        chosen_num = randRange(0, 12);
-        
-        // Prevent duplicates
-        if(deck_of_card[chosen_suit][chosen_num] != "pie"){
-            cout << deck_of_card[chosen_suit][chosen_num] << "\n";
-            deck_of_card[chosen_suit][chosen_num] = "pie";
-        } else{
-            k--;
-        }
-    }
-    
+
 }
 
 
