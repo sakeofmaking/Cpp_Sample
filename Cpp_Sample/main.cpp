@@ -1,75 +1,88 @@
 /******************************************************************
- * Title: English Text For Numbers
+ * Title: Sum of Prime Factor is Prime
  *
- * Purpose: Implement the source code that turns numbers into English 
- * text for numbers between -999,999 and 999,999. (Hint: You might also 
- * be able to take advantage of the fact that the integer data type will 
- * truncate decimal points. Also, remember that your algorithm doesn’t 
- * have to work for all numbers—only numbers with six digits or less. )
+ * Purpose: Design a program that finds all numbers from 1 to 1000 
+ * whose prime factors, when added together, sum up to a prime number 
+ * (for example, 12 has prime factors of 2, 2, and 3, which sum to 7, 
+ * which is prime). Implement the code for that algorithm.
  *
  * Source: Allain, Alex (2013-09-16). Jumping into C++ (p. 120). Cprogramming.com. Kindle Edition.
+ * Link: http://www.geeksforgeeks.org/print-all-prime-factors-of-a-given-number/
  *
  ******************************************************************/
 
 #include <iostream>
+#include <math.h>       // For determining the prime factor
+#include <stdbool.h>    // For prime number function
 
 using namespace std;
 
+bool prime_number(int num){
+    int i;
+    int modular = 0;
+    
+    if(num <= 1){
+        return(0);
+    } else {
+        for(i = 2; i < num; i++){
+            modular = num % i;
+            if(modular == 0){
+                return(0);
+            }
+        }
+        return(1);
+    }
+    
+}
+
 int main(){
-    int number = 0;
-    int thousands_chunk = 0;
-    int hundreds_chunk = 0;
-    string under_twenty[19] = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven",
-                        "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"};
-    string twenty_above[] = {"twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"};
+    int i, j, k, m, n;
+    int prime_factor[20];       // Stores the prime factors
+    int index;                  // Indexes prime_factor
+    int sum;                    // Stores the sum of prime factors
     
-    // Store input as number
-    cout << "Enter number from -999999 to 999999: ";
-    cin >> number;
-    
-    // If negative, display "negative" and convert to positive
-    if(number < 0){
-        cout << "negative ";
-        number = -number;
-    }
-    
-    // Break number into chunks of three digits
-    thousands_chunk = number / 1000;
-    hundreds_chunk = number - (thousands_chunk * 1000);
-
-    // Compute text of thousands chunk
-    if(thousands_chunk != 0){
-        if((thousands_chunk / 100) != 0){
-            cout << under_twenty[(thousands_chunk / 100) - 1] << " hundred ";
+    for(i = 1; i <= 1000; i++){
+        // Initialize prime_factor to 0
+        for(k = 0; k < 20; k++){
+            prime_factor[k] = 0;
         }
-        if((thousands_chunk - (thousands_chunk / 100 * 100) < 20) && (thousands_chunk - (thousands_chunk / 100 * 100) > 0)){
-            cout << under_twenty[thousands_chunk - (thousands_chunk / 100 * 100) - 1];
-        } else{
-            cout << twenty_above[((thousands_chunk - (thousands_chunk / 100 * 100)) / 10) - 2];
-            if(thousands_chunk - (thousands_chunk / 10 * 10) != 0){
-                cout << ' ' << under_twenty[thousands_chunk - (thousands_chunk / 10 * 10) - 1];
+        index = 0;
+        sum = 0;
+        
+        /******* Determine prime factors of i ******/
+        n = i;
+        // Store the number of 2s that divide n
+        while(n%2 == 0){
+            prime_factor[index] = 2;
+            index++;
+            n = n/2;
+        }
+        // n is now odd, so we skip one element
+        for(j = 3; j <= sqrt(n); j = j+2){
+            // While j divides n, print j and divide n
+            while(n%j == 0){
+                prime_factor[index] = j;
+                index++;
+                n = n/j;
             }
         }
-        if(thousands_chunk != 0){
-            cout << " thousand ";
+        // This handles the case when n is a prime number greater than 2
+        if(n > 2){
+            prime_factor[index] = n;
         }
+        
+        /****** Sum the prime factors ******/
+        for(m = 0; m < 20; m++){
+            sum += prime_factor[m];
+        }
+        
+        /****** Display i if sum is a prime number ******/
+        if(prime_number(sum) == 1){
+            cout << i << '\n';
+        }
+        
     }
-    
-    // Compute text of hundreds chunk
-    if(hundreds_chunk != 0){
-        if((hundreds_chunk / 100) != 0){
-            cout << under_twenty[(hundreds_chunk / 100) - 1] << " hundred ";
-        }
-        if((hundreds_chunk - (hundreds_chunk / 100 * 100) < 20) && (hundreds_chunk - (hundreds_chunk / 100 * 100) > 0)){
-            cout << under_twenty[hundreds_chunk - (hundreds_chunk / 100 * 100) - 1];
-        } else{
-            cout << twenty_above[((hundreds_chunk - (hundreds_chunk / 100 * 100)) / 10) - 2];
-            if(hundreds_chunk - (hundreds_chunk / 10 * 10) != 0){
-                cout << ' ' << under_twenty[hundreds_chunk - (hundreds_chunk / 10 * 10) - 1];
-            }
-        }
-    }
-
+   
 }
 
 
