@@ -1,89 +1,83 @@
 /******************************************************************
- * Title: Sum of Prime Factor is Prime
+ * Title: Highest Lowest Average
  *
- * Purpose: Design a program that finds all numbers from 1 to 1000 
- * whose prime factors, when added together, sum up to a prime number 
- * (for example, 12 has prime factors of 2, 2, and 3, which sum to 7, 
- * which is prime). Implement the code for that algorithm.
+ * Prompt: Write a program that takes in 50 values and prints out the 
+ * highest, the lowest, the average and then all 50 input values, one per line.
  *
- * Source: Allain, Alex (2013-09-16). Jumping into C++ (p. 120). Cprogramming.com. Kindle Edition.
- * Link: http://www.geeksforgeeks.org/print-all-prime-factors-of-a-given-number/
+ * Source: Allain, Alex (2013-09-16). Jumping into C++ (p. 147). Cprogramming.com. Kindle Edition.
  *
+ * Warning: For simplification, input array is set between 10 and 99
  ******************************************************************/
 
 #include <iostream>
-#include <math.h>       // For determining the prime factor
-#include <stdbool.h>    // For prime number function
+#include <ctime>        // For random seed
+#include <cstdlib>
+
+#define SIZE 50
 
 using namespace std;
 
-bool prime_number(int num){
-    int i;
-    int modular = 0;
+// Generates a random number between low and high
+int randRange(int low, int high)
+{
+    return rand() % (high - low + 1) + low;
+}
+
+// Prints the highest, lowest, average, entire array
+void printHLA(int randArray[SIZE])
+{
+    int i, j;
+    int highest = 0;
+    int lowest = 100;
+    int sum = 0;
     
-    if(num <= 1){
-        return(0);
-    } else {
-        for(i = 2; i < num; i++){
-            modular = num % i;
-            if(modular == 0){
-                return(0);
-            }
+    // Print highest value
+    for(i = 0; i < SIZE; i++)
+    {
+        if(randArray[i] > highest)
+        {
+            highest = randArray[i];
         }
-        return(1);
+        if(randArray[i] < lowest)
+        {
+            lowest = randArray[i];
+        }
+        sum += randArray[i];
     }
+    cout << "Highest = " << highest << '\n';
+    cout << "Lowest = " << lowest << '\n';
+    cout << "Average = " << sum / SIZE << '\n';
+    
+    // Print entire array
+    cout << "Entire array:\n";
+    for(j = 0; j < SIZE; j++)
+    {
+        cout << randArray[j] << '\n';
+    }
+}
+
+
+int main()
+{
+    // Seed srand
+    srand((int)time(NULL));
+    
+    // Create array of 50 random int
+    int randArray[SIZE];
+    for(int i = 0; i < SIZE; i++)
+    {
+        randArray[i] = randRange(10, 99);
+    }
+    
+    printHLA(randArray);
     
 }
 
-int main(){
-    int i, j, k, m, n;
-    int prime_factor[20];       // Stores the prime factors
-    int index;                  // Indexes prime_factor
-    int sum;                    // Stores the sum of prime factors
-    
-    for(i = 1; i <= 1000; i++){
-        // Initialize prime_factor to 0
-        for(k = 0; k < 20; k++){
-            prime_factor[k] = 0;
-        }
-        index = 0;
-        sum = 0;
-        
-        /******* Determine prime factors of i ******/
-        n = i;
-        // Store the number of 2s that divide n
-        while(n%2 == 0){
-            prime_factor[index] = 2;
-            index++;
-            n = n/2;
-        }
-        // n is now odd, so we skip one element
-        for(j = 3; j <= sqrt(n); j = j+2){
-            // While j divides n, print j and divide n
-            while(n%j == 0){
-                prime_factor[index] = j;
-                index++;
-                n = n/j;
-            }
-        }
-        // This handles the case when n is a prime number greater than 2
-        if(n > 2){
-            prime_factor[index] = n;
-        }
-        
-        /****** Sum the prime factors ******/
-        for(m = 0; m < 20; m++){
-            sum += prime_factor[m];
-        }
-        
-        /****** Display i if sum is a prime number ******/
-        if(prime_number(sum) == 1){
-            cout << i << '\n';
-        }
-        
-    }
-   
-}
+
+
+
+
+
 
 
 
