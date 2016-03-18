@@ -1,115 +1,79 @@
 /******************************************************************
- * Title: Detect Sort
+ * Title: Tic-Tac-Toe
  *
- * Prompt: Write a program that detects whether an array is sorted or not, and if it is not sorted, sort it.
+ * Prompt: Write a small tic-tac-toe program that allows two players 
+ * to play tic-tac-toe competitively. Your program should check to see 
+ * if either player has won, or if the board is filled completely (with 
+ * the game ending in a tie). Bonus: can you make your program detect 
+ * if the game cannot be won by either side before the entire grid is filled?
  *
  * Source: Allain, Alex (2013-09-16). Jumping into C++ (p. 147). Cprogramming.com. Kindle Edition.
  *
- * Note: findSmallestRemainingElement, swap, sort, displayArray functions from "Jumping into C++"
- *
  ******************************************************************/
 
-#include <cstdlib>
 #include <iostream>
 
 using namespace std;
 
-int findSmallestRemainingElement(int array[], int size, int index);
-void swap(int array[], int first_index, int second_index);
-
-void sort(int array[], int size)
-{
-    for(int i = 0; i < size; i++)
-    {
-        int index = findSmallestRemainingElement(array, size, i);
-        swap(array, i, index);
-    }
+void print_board(char spot[]){
+    cout << " " << spot[0] << " | " << spot[1] << " | " << spot[2] << " \n";
+    cout << "-----------\n";
+    cout << " " << spot[3] << " | " << spot[4] << " | " << spot[5] << " \n";
+    cout << "-----------\n";
+    cout << " " << spot[6] << " | " << spot[7] << " | " << spot[8] << " \n";
 }
 
-int findSmallestRemainingElement(int array[], int size, int index)
-{
-    int index_of_smallest_value = index;
-    for(int i = index + 1; i < size; i++)
-    {
-        if(array[i] < array[index_of_smallest_value])
-        {
-            index_of_smallest_value = i;
-        }
-    }
-    return index_of_smallest_value;
-}
-
-void swap(int array[], int first_index, int second_index)
-{
-    int temp = array[first_index];
-    array[first_index] = array[second_index];
-    array[second_index] = temp;
-}
-
-// Small helper function to display the before and after arrays
-void displayArray(int array[], int size)
-{
-    cout << "{";
-    for(int i = 0; i < size; i++)
-    {
-        if(i != 0)
-        {
-            cout << ", ";
-        }
-        cout << array[i];
-    }
-    cout << "}";
-}
-
-int detect_sorted(int array[], int size)
-{
-    int compare = 0;
-    int i;
-    
-    for(i = 0; i < size; i++)
-    {
-        if(compare > array[i])
-        {
-            return(1);
-        }
-        else
-        {
-            compare = array[i];
-        }
+void winner(char spot[]){
+    // Check for winner / tie
+    if(((spot[0] == spot[1]) && (spot[1] == spot[2])) ||
+       ((spot[3] == spot[4]) && (spot[4] == spot[5])) ||
+       ((spot[6] == spot[7]) && (spot[7] == spot[8])) ||
+       ((spot[0] == spot[3]) && (spot[3] == spot[6])) ||
+       ((spot[1] == spot[4]) && (spot[4] == spot[7])) ||
+       ((spot[2] == spot[5]) && (spot[5] == spot[8])) ||
+       ((spot[0] == spot[4]) && (spot[4] == spot[8])) ||
+       ((spot[2] == spot[4]) && (spot[4] == spot[6]))){
+        cout << "WINNER!\n";
+    } else if((spot[0] != '1') && (spot[1] != '2') && (spot[2] != '3') &&
+              (spot[3] != '4') && (spot[4] != '5') && (spot[5] != '6') &&
+              (spot[6] != '7') && (spot[7] != '8') && (spot[8] != '9')){
+        cout << "TIE!\n";
     }
     
-    return(0);
 }
 
-int main()
-{
-    int size = 10;
-    int array[] = {1, 2, 3, 5, 4, 6, 7, 8, 9, 10};
+int main(){
+    char board_position;
+    char board[9] = { '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+    bool turn = 0;
     
-    // Print original array
-    cout << "Original array: ";
-    displayArray(array, size);
-    cout << '\n';
+    print_board(board);
     
-    // Detect if array is sorted
-    if(detect_sorted(array, size) == 1)
-    {
-        cout << "Original array is NOT sorted\n";
+    while(board_position != 'q'){
+        turn = !turn;
         
-        sort(array, size);
+        if(turn){
+            cout << "Player X turn: ";
+            cin >> board_position;
+            if(board_position == 'q'){
+                break;
+            }
+            board[board_position - 49] = 'X';
+        } else{
+            cout << "Player O turn: ";
+            cin >> board_position;
+            if(board_position == 'q'){
+                break;
+            }
+            board[board_position - 49] = 'O';
+        }
+        print_board(board);
         
-        // Print sorted array
-        cout << "Sorted array: ";
-        displayArray(array, size);
-        cout << '\n';
-    }
-    else
-    {
-        cout << "Original array is sorted\n";
+        // Function to check for winner
+        winner(board);
     }
     
 }
-
 
 
 
